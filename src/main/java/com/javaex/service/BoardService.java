@@ -24,65 +24,66 @@ public class BoardService {
 		return boardDao.selectList();
 	}
 
+	
 	// 리스트(리스트 + 페이징)
 	public Map<String, Object> getBoardList2(int crtPage) {
 		System.out.println("boardService/list2");
 		/////////////////////////////////////
 		// 리스트 가져오기
 		//////////////////////////////////////
-
-		// 페이지당 글개수
+		
+		//페이지당 글개수
 		int listCnt = 10;
-
-		// 현재페이지 처리
-		crtPage = (crtPage > 0) ? crtPage : (crtPage = 1);
-
-		// 시작글 번호 1-->1 6-->51
-		int startRnum = (crtPage - 1) * listCnt + 1;
-
-		// 끝글 번호
+		
+		//현재페이지 처리
+		crtPage = (crtPage>0) ? crtPage : (crtPage=1);
+		
+		//시작글 번호  1-->1     6-->51
+		int startRnum = (crtPage-1)*listCnt + 1;
+		
+		//끝글 번호
 		int endRnum = (startRnum + listCnt) - 1;
-
+		
 		List<BoardVo> boardList = boardDao.selectList2(startRnum, endRnum);
-
+		
+		
 		/////////////////////////////////////
 		// 페이징 버튼
 		//////////////////////////////////////
-
-		// 전체 글갯수 가져오기
+		
+		//전체 글갯수 가져오기
 		int totalCnt = boardDao.selectTotal();
 		System.out.println("totalCnt= " + totalCnt);
-
-		// 페이지당 버튼 갯수
+		
+		//페이지당 버튼 갯수
 		int pageBtnCount = 5;
 
-		// **마지막 버튼 번호
-		// 1 1~5 0.2
-		// 2 1~5 0.4
-		// 3 1~5 0.6
-		// 5 1~5 1
-		// 6 6~10 1.2
-		// 10 6~10
-		// 11 11~15
-		int endPageBtnNo = (int) (Math.ceil(crtPage / (double) pageBtnCount)) * pageBtnCount;
 
-		// 시작 버튼 번호
-		int startPageBtnNo = endPageBtnNo - (pageBtnCount - 1);
-
-		// 다음 화살표 유무
+		//**마지막 버튼 번호
+			//1    1~5     0.2
+			//2    1~5     0.4
+			//3    1~5     0.6 
+			//5    1~5     1 
+			//6    6~10    1.2
+			//10   6~10
+			//11   11~15
+		int endPageBtnNo = (int)(   Math.ceil( crtPage/(double)pageBtnCount )   )*pageBtnCount;  
+		
+		//시작 버튼 번호
+		int startPageBtnNo = endPageBtnNo - (pageBtnCount-1);
+		
+		//다음 화살표 유무
 		boolean next = false;
-		if (endPageBtnNo * listCnt < totalCnt) {
+		if(endPageBtnNo * listCnt < totalCnt ) {
 			next = true;
-		} else {	//다음 화살표가 안보이면 버튼값을 다시 계산
-			endPageBtnNo = (int)(Math.ceil(totalCnt/(double)listCnt));
 		}
-
-		// 이전 화살표 유무
+		
+		//이전 화살표 유무
 		boolean prev = false;
-		if (startPageBtnNo != 1) {
+		if(startPageBtnNo != 1) {
 			prev = true;
 		}
-
+		
 		/////////////////////////////////////
 		// 포장
 		//////////////////////////////////////
@@ -92,23 +93,32 @@ public class BoardService {
 		pMap.put("endPageBtnNo", endPageBtnNo);
 		pMap.put("next", next);
 		pMap.put("boardList", boardList);
-
+		
+		
 		return pMap;
 	}
-
+	
+	
+	
+	
+	
 	// 글쓰기
 	public int addBoard(BoardVo boardVo) {
 		System.out.println("boardService/addBoard");
 
-		// 페이징 테이타 추가 123개
+		//페이징 테이타 추가 123개
 		/*
-		 * for(int i=1; i<=123; i++) { boardVo.setTitle(i + "번째글 제목입니다.");
-		 * boardVo.setContent(i + "번째글 내용입니다."); boardVo.setHit(0);
-		 * boardVo.setUserNo(1); boardDao.insert(boardVo); }
-		 */
+		for(int i=1; i<=123; i++) {
+			boardVo.setTitle(i + "번째글 제목입니다.");
+			boardVo.setContent(i + "번째글 내용입니다.");
+			boardVo.setHit(0);
+			boardVo.setUserNo(1);
+			boardDao.insert(boardVo);
+		}
+		*/
 		return boardDao.insert(boardVo);
-
-		// return 1;
+		
+		//return 1;
 	}
 
 	// 글가져오기

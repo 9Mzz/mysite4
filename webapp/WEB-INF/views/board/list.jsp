@@ -58,7 +58,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${pMap.boardList }" var="boardVo">
+								<c:forEach items="${boardList }" var="boardVo">
 									<tr>
 										<td>${boardVo.no }</td>
 										<td class="text-left"><a href="${pageContext.request.contextPath }/board/read?&no=${boardVo.no }">${boardVo.title }</a></td>
@@ -75,18 +75,18 @@
 
 						<div id="paging">
 							<ul>
-								<c:if test="${requestScope.pMap.prev == true }">
-									<li><a href="${pageContext.request.contextPath }/board/list2?crtPage=${pMap.startPageBtnNo-1}">◀</a></li>
-								</c:if>
-
-
-								<c:forEach begin="${pMap.startPageBtnNo}" end="${pMap.endPageBtnNo}}" step="1" var="page">
-									<li class="active"><a href="${pageContext.request.contextPath }/board/list2?crtPage=${page}">${page}</a></li>
-								</c:forEach>
-
-								<c:if test="${requestScope.pMap.next == true }">
-									<li><a href="${pageContext.request.contextPath }/board/list2?crtPage=${pMap.startPageBtnNo+1">▶</a></li>
-								</c:if>
+								<li><a href="">◀</a></li>
+								<li><a href="">1</a></li>
+								<li><a href="">2</a></li>
+								<li><a href="">3</a></li>
+								<li><a href="">4</a></li>
+								<li class="active"><a href="">5</a></li>
+								<li><a href="">6</a></li>
+								<li><a href="">7</a></li>
+								<li><a href="">8</a></li>
+								<li><a href="">9</a></li>
+								<li><a href="">10</a></li>
+								<li><a href="">▶</a></li>
 							</ul>
 
 

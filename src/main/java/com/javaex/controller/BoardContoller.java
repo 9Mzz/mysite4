@@ -50,7 +50,7 @@ public class BoardContoller {
 		System.out.println(pMap);
 		System.out.println("--------------------------");
 		
-		model.addAttribute("pMap", pMap);
+		//model.addAttribute("boardList", boardList);
 		
 		return "board/list";
 	}
