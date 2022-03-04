@@ -86,7 +86,6 @@
 							<!-- 약관동의 -->
 							<div class="form-group">
 								<span class="form-text">약관동의</span> 
-								
 								<input type="checkbox" id="chk-agree" value="" name="">
 								<label for="chk-agree">서비스 약관에 동의합니다.</label> 
 							</div>
