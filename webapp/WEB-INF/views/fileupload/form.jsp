@@ -22,7 +22,7 @@
 
 		<div id="container" class="clearfix">
 			<!-- 게시판 aside -->
-			<c:import url="/WEB-INF/views/include/asideGallery.jsp"></c:import>
+			<c:import url="/WEB-INF/views/include/aside_gallery.jsp"></c:import>
 			<!-- //게시판 aside -->
 
 			<div id="content">
@@ -41,19 +41,15 @@
 				<!-- //content-head -->
 
 				<div id="file">
-					<form action="${pageContext.request.contextPath }/fileupload/upload" method="post"  enctype="multipart/form-data">
+					<form method="post" action="${pageContext.request.contextPath }/fileupload/upload" enctype="multipart/form-data">
 						<table>
 							<colgroup>
 								<col style="width: 600px;">
 								<col style="width: 220px;">
 							</colgroup>
 							<tr>
-								<td class="text-left">
-									<input type="file" name="file">
-								</td>
-								<td class="text-right">
-									<button type="submit">파일업로드</button>
-								</td>
+								<td class="text-left"><input type="file" name="file"></td>
+								<td class="text-right"><button type="submit">파일업로드</button></td>
 							</tr>
 						</table>
 					</form>

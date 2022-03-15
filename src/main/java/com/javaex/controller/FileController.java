@@ -12,30 +12,27 @@ import com.javaex.service.FileService;
 @Controller
 @RequestMapping("/fileupload")
 public class FileController {
-
+	
 	@Autowired
 	private FileService fileService;
 	
-	//파일업로드 폼
+	// 파일업로드 폼
 	@RequestMapping("/form")
 	public String form() {
-		System.out.println("FileController.form()");
+		System.out.println("fileController/form()");
 		
-		return "fileupload/form";
+		return "/fileupload/form";
 	}
 	
 	
-	//파일업로드 처리
+	// 파일업로드
 	@RequestMapping("/upload")
 	public String upload(@RequestParam("file") MultipartFile file, Model model) {
-		System.out.println("FileController.upload()");
+		System.out.println("fileController/upload()");
 		
-		String saveName = fileService.restore(file);
+		String saveName= fileService.restore(file);
 		model.addAttribute("saveName", saveName);
 		
-		return "fileupload/result";
+		return "/fileupload/result";
 	}
-	
-	
-	
 }

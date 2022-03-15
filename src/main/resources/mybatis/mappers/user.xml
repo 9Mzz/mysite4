@@ -3,51 +3,47 @@
 
 <mapper namespace="user">
 
-	<!-- 회원정보저장 -->
-	<insert id="insert" parameterType="com.javaex.vo.UserVo">
+	<select id="getUser" parameterType="UserVo" resultType="UserVo">
 		<![CDATA[
-			insert into users
-			values (seq_users_no.nextval,
-			        #{id},
-			        #{password},
-			        #{name},
-			        #{gender} )
+			select  		no,
+							id,
+							password,
+	        				name,
+	        				gender
+			from   			users
+			where id= 		#{id}
+			and password= 	#{password}
+		]]>
+	</select>
+
+
+	<insert id="userInsert" parameterType="UserVo">
+		<![CDATA[
+			insert into  users 
+			values		 (seq_users_no.nextval, #{id}, #{password}, #{name}, #{gender})
 		]]>
 	</insert>
 
 
-	<!-- 회원정보 가져오기(로그인) -->
-	<select id="selectUser" parameterType="com.javaex.vo.UserVo" resultType="com.javaex.vo.UserVo">
-    	<![CDATA[
-    		select  no,
-        			name
-			from users
-			where id = #{id}
-			and password = #{password}
-    	]]>
-	</select>
-
-
-	<!-- 회원정보 가져오기(수정폼) -->
-	<select id="selectUserByNo" parameterType="int" resultType="com.javaex.vo.UserVo">
+	<update id="userUpdate" parameterType="UserVo">
 		<![CDATA[
-			select no, id, password, name, gender
-			from users
-			where no = #{no}
-		]]>
-	</select>
-
-
-	<!-- 회원정보 수정 -->
-	<update id="update" parameterType="com.javaex.vo.UserVo">
-		<![CDATA[
-			update users
-			set name = #{name},
-			    gender = #{gender},
-			    password = #{password}
-			where no = #{no}    
+			update		users
+			set			password= #{password},
+	 					name= #{name},
+	 					gender= #{gender}
+			where		no= #{no}
 		]]>
 	</update>
+	
+	
+	<!-- id 중복체크 -->
+	<select id="checkDup" parameterType="UserVo" resultType="int">
+		<![CDATA[
+			select 		count(id)
+			from   		users
+			where   	id= #{id}
+		]]>
+	</select>
 
 
 </mapper>

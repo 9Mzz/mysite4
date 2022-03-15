@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+    
 
 <!DOCTYPE html>
 <html>
@@ -14,17 +15,12 @@
 <body>
 	<div id="wrap">
 
-		<!-- header.jsp -->
 		<c:import url="/WEB-INF/views/include/header.jsp"></c:import>
+		<!-- //header -->
+
 
 		<div id="container" class="clearfix">
-			<div id="aside">
-				<h2>방명록</h2>
-				<ul>
-					<li>일반방명록</li>
-					<li>ajax방명록</li>
-				</ul>
-			</div>
+			<c:import url="/WEB-INF/views/include/aside_guestbook.jsp"></c:import>
 			<!-- //aside -->
 
 			<div id="content">
@@ -43,7 +39,7 @@
 				<!-- //content-head -->
 	
 				<div id="guestbook">
-					<form action="${pageContext.request.contextPath}/guestbook/delete" method="get">
+					<form action="${pageContext.request.contextPath}/guest/delete" method="get">
 						<table id="guestDelete">
 							<colgroup>
 								<col style="width: 10%;">
@@ -53,12 +49,13 @@
 							</colgroup>
 							<tr>
 								<td>비밀번호</td>
-								<td><input type="password" name="password"></td>
+								<td><input type="password" name="password" autofocus></td>
 								<td class="text-left"><button type="submit">삭제</button></td>
-								<td><a href="${pageContext.request.contextPath}/guestbook/addList">[메인으로 돌아가기]</a></td>
+								<td><a href="${pageContext.request.contextPath}/">[메인으로 돌아가기]</a></td>
 							</tr>
 						</table>
-						<input type='text' name="no" value="${param.no}">
+						<input type='hidden' name="no" value="${param.no}">
+
 					</form>
 					
 				</div>
@@ -69,8 +66,8 @@
 		</div>
 		<!-- //container  -->
 		
-		<!-- footer -->
 		<c:import url="/WEB-INF/views/include/footer.jsp"></c:import>
+		<!-- //footer -->
 
 	</div>
 	<!-- //wrap -->

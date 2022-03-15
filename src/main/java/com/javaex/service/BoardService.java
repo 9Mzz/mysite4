@@ -6,150 +6,98 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.javaex.dao.BoardDao;
 import com.javaex.vo.BoardVo;
 
 @Service
 public class BoardService {
-
+	
 	@Autowired
-	private BoardDao boardDao;
-
-	// 리스트(리스트만 출력할때)
-	public List<BoardVo> getBoardList() {
-		System.out.println("boardService/list");
-
-		return boardDao.selectList();
+	private BoardDao bd;
+	
+	
+	public List<BoardVo> list() {
+		return bd.getList();
+	}
+	
+	
+	public BoardVo read(int no) {
+		bd.getPost(no); // 특정글 선택
+		bd.read(no); // 조회수 +1
+		return bd.getPost(no);
 	}
 
 	
-	// 리스트(리스트 + 페이징)
-	public Map<String, Object> getBoardList2(int crtPage) {
-		System.out.println("boardService/list2");
-		/////////////////////////////////////
-		// 리스트 가져오기
-		//////////////////////////////////////
+	public BoardVo post(int no) {
+		return bd.getPost(no);
+	}
+	
+	
+	public void modify(BoardVo vo) {
+		bd.modify(vo);
+	}
+	
+	
+	public void delete(int no) {
+		bd.delete(no);
+	}
+	
+	
+	public void write(BoardVo vo) {
+		bd.write(vo);
+	}
+	
+	
+	// 리스트 & 페이징
+	public Map<String, Object> list2(int crtPage) {
 		
-		//페이지당 글개수
-		int listCnt = 10;
+		// 페이징 리스트 영역
+		// 현재 페이지 처리 (3항 연산자) crtPage 1이상을 제외하고 1로 처리
+		int crtPageNo= (crtPage>0) ? crtPage : (crtPage= 1);
 		
-		//현재페이지 처리
-		crtPage = (crtPage>0) ? crtPage : (crtPage=1);
-		
-		//시작글 번호  1-->1     6-->51
-		int startRnum = (crtPage-1)*listCnt + 1;
-		
-		//끝글 번호
-		int endRnum = (startRnum + listCnt) - 1;
-		
-		List<BoardVo> boardList = boardDao.selectList2(startRnum, endRnum);
+		int listCnt= 10; // 한 페이지당 글 개수
+		int startRnum= (crtPage-1)*listCnt +1; // 시작글 번호
+		int endRnum= (startRnum+listCnt) -1; // 마지막글 번호
 		
 		
-		/////////////////////////////////////
-		// 페이징 버튼
-		//////////////////////////////////////
+		// 페이징 버튼영역
+		// 데이터 총개수
+		int totalCnt= bd.count();
 		
-		//전체 글갯수 가져오기
-		int totalCnt = boardDao.selectTotal();
-		System.out.println("totalCnt= " + totalCnt);
+		// 페이지당 버튼 갯수
+		int pageBtnCnt= 5;
 		
-		//페이지당 버튼 갯수
-		int pageBtnCount = 5;
-
-
-		//**마지막 버튼 번호
-			//1    1~5     0.2
-			//2    1~5     0.4
-			//3    1~5     0.6 
-			//5    1~5     1 
-			//6    6~10    1.2
-			//10   6~10
-			//11   11~15
-		int endPageBtnNo = (int)(   Math.ceil( crtPage/(double)pageBtnCount )   )*pageBtnCount;  
+		// 마지막 버튼
+		int endBtnNo= (int)(Math.ceil(crtPage/(double)pageBtnCnt))*pageBtnCnt;
 		
-		//시작 버튼 번호
-		int startPageBtnNo = endPageBtnNo - (pageBtnCount-1);
+		// 시작버튼
+		int startBtnNo= endBtnNo-(pageBtnCnt-1);
 		
-		//다음 화살표 유무
-		boolean next = false;
-		if(endPageBtnNo * listCnt < totalCnt ) {
-			next = true;
+		// 다음화살표 유무
+		boolean next= false;
+		if(endBtnNo*listCnt<totalCnt) {
+			next= true;
+		}
+		else { // 다음화살표가 없을때, 마지막 버튼값을 다시계산
+			endBtnNo= (int)Math.ceil(totalCnt/(double)listCnt);
 		}
 		
-		//이전 화살표 유무
-		boolean prev = false;
-		if(startPageBtnNo != 1) {
-			prev = true;
+		// 이전화살표 유무
+		boolean prev= false;
+		if(startBtnNo!=1) {
+			prev= true;
 		}
 		
-		/////////////////////////////////////
-		// 포장
-		//////////////////////////////////////
-		Map<String, Object> pMap = new HashMap<String, Object>();
+		// 데이터 포장
+		Map<String, Object> pMap= new HashMap<String, Object>();
 		pMap.put("prev", prev);
-		pMap.put("startPageBtnNo", startPageBtnNo);
-		pMap.put("endPageBtnNo", endPageBtnNo);
+		pMap.put("startBtnNo", startBtnNo);
+		pMap.put("endBtnNo", endBtnNo);
 		pMap.put("next", next);
-		pMap.put("boardList", boardList);
-		
-		
-		return pMap;
+		pMap.put("bList", bd.getList2(startRnum, endRnum));
+		pMap.put("crtPageNo", crtPageNo);
+
+		return pMap;	
 	}
-	
-	
-	
-	
-	
-	// 글쓰기
-	public int addBoard(BoardVo boardVo) {
-		System.out.println("boardService/addBoard");
-
-		//페이징 테이타 추가 123개
-		/*
-		for(int i=1; i<=123; i++) {
-			boardVo.setTitle(i + "번째글 제목입니다.");
-			boardVo.setContent(i + "번째글 내용입니다.");
-			boardVo.setHit(0);
-			boardVo.setUserNo(1);
-			boardDao.insert(boardVo);
-		}
-		*/
-		return boardDao.insert(boardVo);
-		
-		//return 1;
-	}
-
-	// 글가져오기
-	@Transactional
-	public BoardVo getBoard(int no, String type) throws Exception {
-		System.out.println("boardService/getBoard");
-
-		if ("read".equals(type)) {// 읽기 일때는 조회수 올림
-			boardDao.updateHit(no);
-			BoardVo boardVo = boardDao.select(no);
-			return boardVo;
-
-		} else { // 수정 일때는 조회수 올리지 않음
-			BoardVo boardVo = boardDao.select(no);
-			return boardVo;
-		}
-
-	}
-
-	// 글수정
-	public int modifyBoard(BoardVo boardVo) {
-		System.out.println("boardService/modifyBoard");
-
-		return boardDao.update(boardVo);
-	}
-
-	// 글삭제
-	public int removeBoard(BoardVo boardVo) {
-		System.out.println("boardService/removeBoard");
-
-		return boardDao.delete(boardVo);
-	}
-
 }

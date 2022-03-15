@@ -11,54 +11,55 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.javaex.service.GuestbookService;
 import com.javaex.vo.GuestbookVo;
 
-
 @Controller
-@RequestMapping(value="/guestbook")
+@RequestMapping("/guest")
 public class GuestbookController {
 	
 	@Autowired
 	private GuestbookService guestbookService;
-
-	//방명록 리스트 가져오기
-	@RequestMapping(value="/addList")
-	public String list(Model model){
-		System.out.println("guestbookController/list");
+	
+	// 방명록 리스트 & 등록
+	@RequestMapping("/addList")
+	public String addList(Model model) {
+		System.out.println("GuestController/addList()");
 		
-		//서비스를 통해 모든 방명록 글 가져오기
-		List<GuestbookVo> guestbookList = guestbookService.getGuestList();
-		System.out.println(guestbookList);
+		List<GuestbookVo> gList= guestbookService.getList();
+		model.addAttribute("gList", gList);
 		
-		//Dispacher Servlet-->jsp에 방명록 글 리스트 전달
-		model.addAttribute("guestbookList", guestbookList);
-		
-		return "guestbook/addList";
+		return "/guestbook/addList";
 	}
 	
-	//방명록 글 저장
-	@RequestMapping(value="/write")
-	public String write(@ModelAttribute GuestbookVo guestbookVo){
-		System.out.println("guestbookController/write");
+	// 방명록 등록
+	@RequestMapping("/insert")
+	public String insert(@ModelAttribute GuestbookVo vo) {
+		System.out.println("GuestController/insert()");
 		
-		guestbookService.addGuest(guestbookVo);
-		return "redirect:/guestbook/addList";
+		guestbookService.insert(vo);
+		
+		return "redirect:/guest/addList";
 	}
 	
-	//방명록 삭제 폼
-	@RequestMapping(value="/deleteForm")
-	public String deleteform(){
-		System.out.println("guestbookController/deleteform");
+	// 삭제폼
+	@RequestMapping("/deleteForm")
+	public String deleteForm() {
+		System.out.println("/GuestController/deleteForm()");
 		
-		return "guestbook/deleteForm";
+		return "/guestbook/deleteForm";
 	}
 	
-	//방명록 삭제
-	@RequestMapping(value="/delete")
-	public String delete(@ModelAttribute GuestbookVo guestbookVo){
-		System.out.println("guestbookController/delete");
+	// 삭제
+	@RequestMapping("/delete")
+	public String delete(@ModelAttribute GuestbookVo vo) {
+		System.out.println("GuestController/delete()");
 		
-		guestbookService.removeGuest(guestbookVo);
-		return "redirect:/guestbook/addList";
+		GuestbookVo post= guestbookService.getGuest(vo);
+		if(post.getPassword().equals(vo.getPassword())) { // 비밀번호 일치
+			System.out.println("password correct");
+			guestbookService.delete(post);
+		}
+		else { // 비밀번호 불일치
+			System.out.println("password incorrect");
+		}
+		return "redirect:/guest/addList";
 	}
-	
-	
 }

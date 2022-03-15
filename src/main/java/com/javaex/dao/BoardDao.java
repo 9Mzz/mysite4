@@ -9,78 +9,59 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.javaex.vo.BoardVo;
+import com.javaex.vo.UserVo;
 
 @Repository
 public class BoardDao {
-
+	
 	@Autowired
 	private SqlSession sqlSession;
-
-	// 글전체 가져오기(리스트만 출력할때)
-	public List<BoardVo> selectList() {
-		System.out.println("boardDao/selectList");
-
-		return sqlSession.selectList("board.selectList");
+	
+	
+	// 리스트 불러오기
+	public List<BoardVo> getList() {
+		return sqlSession.selectList("board.getList");
 	}
-
-
-	// 글리스트 가져오기(리스트+페이징)
-	public List<BoardVo> selectList2(int startRnum, int endRnum) {
-		System.out.println("boardDao/selectList2");
-		System.out.println(startRnum + "," + endRnum);
+	
+	// 특정 게시글 선택
+	public BoardVo getPost(int no) {
+		return sqlSession.selectOne("board.getPost", no);
+	}
+	
+	// 조회수 +1
+	public void read(int no) {
+		sqlSession.update("board.read", no);
+	}
+	
+	// 수정
+	public void modify(BoardVo vo) {
+		sqlSession.update("board.modify", vo);
+	}
+	
+	// 삭제
+	public void delete(int no) {
+		sqlSession.delete("board.delete", no);
+	}
+	
+	// 글작성
+	public void write(BoardVo vo) {
+		sqlSession.insert("board.write", vo);
+	}
+	
+	
+	// 리스트 가져오기 & 페이징
+	public List<BoardVo> getList2(int startRnum, int endRnum) {
 		
-		Map<String, Integer> map = new HashMap<String, Integer>();
+		Map<String, Integer> map= new HashMap<String, Integer>();
 		map.put("startRnum", startRnum);
 		map.put("endRnum", endRnum);
-		
-		List<BoardVo> boardList=sqlSession.selectList("board.selectList2", map);
-		return boardList;
+
+		return sqlSession.selectList("board.getList2", map);
 	}
 	
-	
-
-	// 글저장
-	public int insert(BoardVo boardVo) {
-		System.out.println("boardDao/insert");
-
-		return sqlSession.insert("board.insert", boardVo);
+	// 전체 글갯수 가져오기
+	public int count() {
+		return sqlSession.selectOne("board.count");
 	}
-
-	// 글 1개 가져오기
-	public BoardVo select(int no) {
-		System.out.println("boardDao/select");
-		System.out.println(no);
-		return sqlSession.selectOne("board.selcet", no);
-	}
-
-	// 조회수 업데이트
-	public int updateHit(int no) {
-		System.out.println("boardDao/updateHit");
-
-		return sqlSession.update("board.updateHit", no);
-	}
-
-	// 글수정
-	public int update(BoardVo boardVo) {
-		System.out.println("boardDao/update");
-
-		return sqlSession.update("board.update", boardVo);
-	}
-
-	// 글삭제
-	public int delete(BoardVo boardVo) {
-		System.out.println("boardDao/delete");
-
-		return sqlSession.delete("board.delete", boardVo);
-	}
-
-	//전체 글갯수 가져오기
-	public int selectTotal() {
-		System.out.println("boardDao/selectTotal");
-		
-		return sqlSession.selectOne("board.totalCnt");
-	}
-	
-	
-	
 }
+

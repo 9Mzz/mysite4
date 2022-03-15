@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,23 +14,15 @@
 <body>
 	<div id="wrap">
 
-		<!-- header.jsp -->
 		<c:import url="/WEB-INF/views/include/header.jsp"></c:import>
-
+		<!-- //header -->
 
 		<div id="container" class="clearfix">
-			<div id="aside">
-				<h2>회원</h2>
-				<ul>
-					<li>회원정보</li>
-					<li>로그인</li>
-					<li>회원가입</li>
-				</ul>
-			</div>
+			<c:import url="/WEB-INF/views/include/aside_user.jsp"></c:import>
 			<!-- //aside -->
 
 			<div id="content">
-
+			
 				<div id="content-head">
 					<h3>회원가입</h3>
 					<div id="location">
@@ -44,14 +35,16 @@
 					<div class="clear"></div>
 				</div>
 				<!-- //content-head -->
-
+	
 				<div id="user">
 					<div id="joinOK">
-
+					
 						<p class="text-large bold">
-							회원가입을 축하합니다.<br> <br> <a href="${pageContext.request.contextPath}/user/loginForm">[로그인하기]</a>
+							회원가입을 축하합니다.<br>
+							<br>
+							<a href="${pageContext.request.contextPath}/user/loginForm" >[로그인하기]</a>
 						</p>
-
+							
 					</div>
 					<!-- //joinOK -->
 				</div>
@@ -62,10 +55,8 @@
 		<!-- //container  -->
 
 
-		
-		<!-- footer.jsp -->
 		<c:import url="/WEB-INF/views/include/footer.jsp"></c:import>
-
+		<!-- //footer -->
 
 	</div>
 	<!-- //wrap -->
