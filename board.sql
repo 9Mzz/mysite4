@@ -5,6 +5,7 @@ select  rt.rn,
         rt.regDate,
         rt.userNo,
         rt.userName
+        
 from (select  rownum rn,
               ot.title,
               ot.content,
