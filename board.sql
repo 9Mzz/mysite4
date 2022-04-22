@@ -7,8 +7,6 @@ select  rt.rn,
         rt.userName
         
         
-        
-        
 from (select  rownum rn,
               ot.title,
               ot.content,
